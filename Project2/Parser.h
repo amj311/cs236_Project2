@@ -1,61 +1,72 @@
 #ifndef PARSER_H
 #define PAERSER_H
 
+#include "DatalogProg.h"
 #include "Token.h"
-#include "E_BADTOKEN.h"
 
-struct Parser
+using predPair = pair<string, vector<string>>;
+
+class Parser
 {
+public:
 	Parser(vector<Token*> tokenInput) : tokens(tokenInput) {};
 	bool run();
 	bool parseProgram();
 
+	DatalogProg getParsedProgram() { return prog; }
+
 	vector<Token*> tokens;
-	int tokenIdx = 0;
+
+	bool tryAdvanceIfType(TOKEN_TYPE typeAssert, bool expectEOF = false);
+	vector<Token> repeatListOfType(TOKEN_TYPE);
+
+	bool parse_schemeList();
+	bool parse_scheme();
+
+	bool parse_factList();
+	bool parse_fact();
+
+	bool parse_ruleList();
+	bool parse_rule();
+
+	bool parse_queryList();
+	bool parse_query();
+
+	predPair parse_headPredicate();
+	vector<predPair> parse_predicateList();
+	predPair parse_predicate();
 	
+	bool expectParameter();
+	vector<string> parse_parameterList();
+
+private:
+	size_t tokenIdx = 0;
+
 	Token curToken(bool expectEOF = false) {
 		Token curToken = *tokens[tokenIdx];
-		if (expectEOF && curToken.getType() != EOF_TYPE) throwBadToken(curToken);
+		if (!expectEOF && curToken.getType() == EOF_TYPE) throwBadToken(curToken);
 		return curToken;
 	}
 
 	TOKEN_TYPE curTokenType() {
 		return curToken().getType();
 	}
-	bool curTokenIs(TOKEN_TYPE assertType) {
-		return curToken().isType(assertType);
+	bool curTokenIs(TOKEN_TYPE assertType, bool expectEOF = false) {
+		return curToken(expectEOF).isType(assertType);
 	}
-	void advanceToken() {
+	void advanceToken(bool expectEOF = false) {
 		tokenIdx++;
-		while (tokenIdx < tokens.size() && curTokenIs(COMMENT)) tokenIdx++;
+		while (tokenIdx < tokens.size() && curTokenIs(COMMENT, expectEOF)) tokenIdx++;
 	}
 	bool throwBadToken(Token badToken) {
-		throw E_BADTOKEN(badToken);
+		throw badToken;
 		return false;
 	}
-	bool tryAdvanceIfType(TOKEN_TYPE typeAssert);
 
-	void printFail(E_BADTOKEN& e);
+	void printFail(Token& e);
 	void printSuccess();
 
-	vector<Token> repeatListOfType(TOKEN_TYPE);
-
-	bool parse_schemeList() {return true; };
-	bool parse_scheme();
-
-	bool parse_factList() {return true; };
-	bool parse_fact() {return true; };
-
-	bool parse_ruleList() {return true; };
-	bool parse_rule() {return true; };
-
-	bool parse_queryList() {return true; };
-	bool parse_query() {return true; };
-
-	bool parse_headPredicate() {return true; };
-	bool parse_predicate() {return true; };
-
-	bool parse_parameter() {return true; };
+	DatalogProg prog;
 };
 
 #endif

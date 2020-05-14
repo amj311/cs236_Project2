@@ -5,6 +5,7 @@ using namespace std;
 
 #include "Lexer.h"
 #include "Parser.h"
+#include "DatalogProg.h"
 
 int main(int argc, char** argv)
 {
@@ -16,7 +17,9 @@ int main(int argc, char** argv)
     lexer.tokenizeInput();
 
     Parser parser(lexer.getTokenList());
-    parser.parseProgram();
+    parser.run();
+
+    DatalogProg prog = parser.getParsedProgram();
 
     return 0;
 }

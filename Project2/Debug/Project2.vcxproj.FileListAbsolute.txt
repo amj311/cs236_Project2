@@ -1,2 +1,0 @@
-C:\Users\matth\code\cs236\Project_2\project2_tests\Debug\Project2.pdb
-C:\Users\matth\code\cs236\Project_2\Project2\Debug\Project2.pdb

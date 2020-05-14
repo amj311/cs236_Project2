@@ -1,6 +1,0 @@
-﻿  main.cpp
-C:\Users\matth\code\cs236\Project_2\Project2\Parser.h(30,19): warning C4018: '<': signed/unsigned mismatch
-  Parser.cpp
-C:\Users\matth\code\cs236\Project_2\Project2\Parser.h(30,19): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  Project2.vcxproj -> C:\Users\matth\code\cs236\Project_2\project2_tests\Debug\Project2.lib
